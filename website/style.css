@@ -1,0 +1,17 @@
+.top-header {
+    overflow: hidden;
+    background-color: #222222;
+    position: fixed;
+}
+
+.top-header #links {
+    display: none;
+}
+
+.top-header button.icon {
+    background: #111111;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
