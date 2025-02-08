@@ -1,0 +1,10 @@
+[package]
+name = "minnehack2025"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures-channel = "0.3.31"
+tokio = { version = "1.43.0", features = ["macros", "rt", "rt-multi-thread"] }
+tokio-tungstenite = "0.26.1"
+warp = "0.3.7"
