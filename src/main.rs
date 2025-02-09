@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     env,
     io::Error as IoError,
     net::SocketAddr,
@@ -10,9 +9,6 @@ use futures_channel::mpsc::{unbounded, UnboundedSender};
 
 use tokio::net::{TcpListener, TcpStream};
 use tokio_tungstenite::tungstenite::protocol::Message;
-
-type Tx = UnboundedSender<Message>;
-type PeerMap = Arc<Mutex<HashMap<SocketAddr, Tx>>>;
 
 // warp
 use warp::Filter;
