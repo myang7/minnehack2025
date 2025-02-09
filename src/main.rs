@@ -7,7 +7,7 @@ use std::{
 
 // tungstenite
 use futures_channel::mpsc::{unbounded, UnboundedSender};
-use futures_util::{future, pin_mut, stream::TryStreamExt, StreamExt};
+use futures_util::{future, pin_mut, stream::TryStreamExt, StreamExt, SinkExt, Sink};
 
 use tokio::net::{TcpListener, TcpStream};
 use tokio_tungstenite::tungstenite::protocol::Message;
@@ -55,13 +55,25 @@ async fn handle_connection(raw_stream: TcpStream, addr: SocketAddr) {
     let stream = tokio_tungstenite::accept_async(raw_stream)
         .await
         .expect("Someone (addr-san?!) fucked up the handshake :(");
+
     
     let (_, rx) = unbounded();
 
     let (s_out, s_in) = stream.split();
 
+    pin_mut!(s_out);
+
     let handle_in = s_in.try_for_each(|data| {
         println!("Data: {}", data);
+
+        loop {
+            match s_out.poll_ready() {
+                Ok(n) => { 
+                    s_out.start_send(data);
+                }
+                Err(_) => { continue; }
+            }
+        }
 
         future::ok(())
     });
