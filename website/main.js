@@ -1,8 +1,9 @@
-function navBar() {
+function navBarShow() {
     var x = document.getElementById("links");
-    if (x.style.display === "block") {
-        x.style.display = "none";
-    } else {
-        x.style.display = "block";
-    }
+    x.style.display = "block";
+}
+
+function navBarHide() {
+    var x = document.getElementById("links");
+    x.style.display = "none";
 }
