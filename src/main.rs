@@ -19,6 +19,16 @@ use warp::Filter;
 const WARP_PORT:u16 = 8000;
 const TUNG_PORT:i32 = 8001;
 
+// consider: we cannot send a message because, rust, tokio, tungsten, and their powers combined all
+// hate us. HOWEVER
+// we can forward a stream(? sink? something??) to the output, easily with
+// rx.map(Ok).forward(write);
+// or something to that effect
+// so we just...
+// write the data we need to that channel
+// message comes in -> ??? -> pour data slurry into forwarding channel -> forwarded directly
+// to eager waiting client
+
 // days are represented as an array of numbers that adds up to 24.
 // eg: monday = [8, 2, 3, 1, 5, 5]
 // meaning: 8 hours of busy, 2 hours of free, 3 hours of busy, 1 hour of free,
@@ -46,7 +56,7 @@ struct User {
 }
 
 // our tcp helper function
-async fn handle_connection(raw_stream: TcpStream, addr: SocketAddr) {
+async fn handle_connection(raw_stream: TcpStream, addr: SocketAddr, info_tx: ???) {
     println!("o-oh emm gee!! i-i'm getting a message f-from {}-san!!", addr);
 
     // this function will need to take in an Arc<Mutex<>> once we know what data we're actually
@@ -55,9 +65,10 @@ async fn handle_connection(raw_stream: TcpStream, addr: SocketAddr) {
     let stream = tokio_tungstenite::accept_async(raw_stream)
         .await
         .expect("Someone (addr-san?!) fucked up the handshake :(");
-
     
-    let (_, rx) = unbounded();
+    let (tx, rx) = unbounded();
+
+    stdin_rx.map(Ok).forward(tx);
 
     let (s_out, s_in) = stream.split();
 
@@ -66,18 +77,10 @@ async fn handle_connection(raw_stream: TcpStream, addr: SocketAddr) {
     let handle_in = s_in.try_for_each(|data| {
         println!("Data: {}", data);
 
-        loop {
-            match s_out.poll_ready() {
-                Ok(n) => { 
-                    s_out.start_send(data);
-                }
-                Err(_) => { continue; }
-            }
-        }
-
         future::ok(())
     });
 
+    // what does this line do
     let handle_out = rx.map(Ok).forward(s_out);
 
     // let handle_out = 
