@@ -12,9 +12,14 @@
             <div class=top-header onmouseleave="navBarHide()">
                 <!--Hamburger menu-->
                 <!--TODO: add javascript function-->
-                <button onmouseenter="navBarShow()" class="icon">
+                <button onmouseenter="navBarShow()" onclick="showHome()" class="icon">
                     <i class="fa fa-bars"></i>
                 </button>
+                <form>
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username">
+                    <input type="submit" value="submit">
+                </form>
                 <div id="links">
                     <!--Add javascript functions to call in onclick sections-->
                     <button onclick="">Friends</button>
@@ -23,8 +28,11 @@
                 </div>
             </div>
         </header>
-
         <main>
+            <div class=title-page>
+                <h1>BroBot</h1>
+                <h2>Annoy your friends into hanging out with you</h2>
+            </div>
         </main>
     </body>
     

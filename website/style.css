@@ -1,6 +1,12 @@
+body {
+    margin: auto;
+    background-color: #24273a;
+    color: #cad3f5;
+}
+
 .top-header {
     overflow: hidden;
-    background-color: #222222;
+    background-color: #1e2030;
     position: relative;
 }
 
@@ -10,7 +16,7 @@
 
 .top-header button {
     color: #EEEEEE;
-    background-color: #222222;
+    background-color: #1e2030;
     padding: 10px 12px;
     text-decoration: none;
     font-size: 18px;
@@ -18,9 +24,25 @@
 }
 
 .top-header button.icon {
-    background: #111111;
-    display: block;
+    background: #181926;
+    display: inline-block;
     position: relative;
-    left: 0;
-    top: 0;
+}
+
+.top-header form {
+    display: inline-block;
+}
+
+.title-page {
+    text-align: center;
+    display: block;
+}
+
+.title-page h1 {
+    font-size: 48px;
+}
+
+.title-page h2 {
+    font-size: 18px;
+    color: #b8c0e0;
 }
